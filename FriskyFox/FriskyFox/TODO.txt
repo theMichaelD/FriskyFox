@@ -1,0 +1,37 @@
+- Game.h/.cpp needs to implement some sort of game state tracking system, either through enums or perhaps 
+	a game state stack which pops off states as we need them
+	***used enum, but for greater efficiency down the road, a different approach
+	***should be used
+
+- Create a Background Object Manager, which has a map of std::string keys
+	and std::vector<VisibleObject *> values which can store multiple 
+	objects of the same type, and not have conflicting keys
+	****upon creation, could this be a bit inefficient of a method to store background objects?
+
+- Figure out a way to create level maps, in which a grid or some coordinate system will let
+	us easily map where we want objects and terrain to appear in the level/area.
+
+- Encapsulate engine/library features (e.g. rendering, input ) in a service provider, for modularity (?)
+
+- Once we begin to expand the world, chunk loading/area loading should be handled. In other words, the
+	init() function of Game needs to be changed such that it loads first from the appropriate area/chunks,
+	then the loop() will have to handle loading more chunks and areas. Accordingly, the necessary images
+	should be loaded into and out of the manager (buffer).
+	
+- Perhaps storing chunks/areas as text streams and text files would be best? It may be more efficient than
+	dynamic object creation and destruction as the player moves about the world.
+
+- Collision detection should probably have its own class - this necessitates that all "solid" objects need to have
+	a function to return their bounding rectangles to be passed into a function to check for collision, as
+	well as functions to prevent movement in a certain direction once collision is detected
+	---Possible collision checking procedure---
+		1. call collision check algorithm
+		2. IF collision detected, call stop( std::string direction ) on
+			moving object in question
+		3. once the object moves in different direction, clear stops on
+			blocked directions
+
+- Images need to be placed into tilemaps and sprite sheets to reduce resource drain from ImageManager
+
+- Another layer of abstraction should probably be added to Object: make perhaps a child class called
+	LivingObject, which provides health stats, condition stats, level, moves, etc. for battles
